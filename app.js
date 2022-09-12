@@ -14,7 +14,7 @@ app.use('/users', userRouter);
 
 app.use('/userId', userRouter);
 
-app.post('/users', createUser);
+app.use('/users', createUser);
 
 mongoose.connect('mongodb://localhost:27017/mestodb', () => {
   console.log(`App listening on port ${PORT}`);

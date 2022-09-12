@@ -1,6 +1,6 @@
 const User = require('../models/user');
 
-const getUsers = (req, res, next) => {
+const getUsers = (req, res) => {
   User.find({})
     .then((users) => {
       res.send({ data: users });
@@ -10,7 +10,7 @@ const getUsers = (req, res, next) => {
     });
 };
 
-const getCurrentUser = (req, res, next) => {
+const getCurrentUser = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
     .then((users) => {
@@ -21,7 +21,7 @@ const getCurrentUser = (req, res, next) => {
     });
 };
 
-const createUser = (req, res, next) => {
+const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({
     name,
