@@ -5,6 +5,6 @@ router.get('/', getUsers);
 
 router.get('/:userId', getCurrentUser);
 
-router.post('/users', createUser);
+router.post('/', createUser);
 
 module.exports = router;
