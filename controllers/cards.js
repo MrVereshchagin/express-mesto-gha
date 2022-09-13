@@ -39,8 +39,21 @@ const deleteCard = (req, res) => {
     });
 };
 
+const likeCard = (req, res) => {
+  const owner = req.user._id;
+  const { cardId } = req.params;
+  Card.findByIdAndUpdate(cardId, { $addToSet: { likes: owner } })
+    .then((card) => {
+      res.send(card);
+    })
+    .catch((err) => {
+      res.send({ message: err });
+    });
+};
+
 module.exports = {
   getCards,
   createCard,
   deleteCard,
+  likeCard,
 };
