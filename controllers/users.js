@@ -38,8 +38,20 @@ const createUser = (req, res) => {
     });
 };
 
+const updateProfile = (req, res) => {
+  const { name, about } = req.body;
+  User.findByIdAndUpdate(req.user._id, { name, about })
+    .then((user) => {
+      res.send(user);
+    })
+    .catch((err) => {
+      res.send({ message: err });
+    });
+};
+
 module.exports = {
   getUsers,
   getCurrentUser,
   createUser,
+  updateProfile
 };
