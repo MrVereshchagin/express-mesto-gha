@@ -49,9 +49,21 @@ const updateProfile = (req, res) => {
     });
 };
 
+const updateAvatar = (req, res) => {
+  const { avatar } = req.body;
+  User.findByIdAndUpdate(req.user._id, { avatar })
+    .then((user) => {
+      res.send(user);
+    })
+    .catch((err) => {
+      res.send({ message: err });
+    });
+};
+
 module.exports = {
   getUsers,
   getCurrentUser,
   createUser,
-  updateProfile
+  updateProfile,
+  updateAvatar,
 };
