@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
-const { createUser } = require('./controllers/users');
 // const { createCard, deleteCard } = require('./controllers/cards');
 
 const { PORT = 3000 } = process.env;
@@ -15,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '631f5b830d871a0fa7d3d5ec', // вставьте сюда _id созданного в предыдущем пункте пользователя
+    _id: '6320cab94d4ddf02e6e101cf', // вставьте сюда _id созданного в предыдущем пункте пользователя
   };
 
   next();

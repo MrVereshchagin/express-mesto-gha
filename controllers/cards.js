@@ -11,13 +11,13 @@ const getCards = (req, res) => {
 };
 
 const createCard = (req, res) => {
-  const { name, link, likes } = req.body;
+  const { name, link } = req.body;
+  console.log(req.user._id);
   const { owner } = req.user._id;
   Card.create({
     name,
     link,
     owner,
-    likes,
   })
     .then((card) => {
       res.send({ data: card });
@@ -25,12 +25,11 @@ const createCard = (req, res) => {
     .catch((err) => {
       res.send({ message: err });
     });
-  console.log(req.user._id); // _id станет доступен
 };
 
 const deleteCard = (req, res) => {
-  const { cardId } = req.user._id;
-
+  const { cardId } = req.params;
+  console.log(cardId);
   Card.findById(cardId)
     .then((card) => {
       card.remove();
