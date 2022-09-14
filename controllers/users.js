@@ -2,7 +2,6 @@ const User = require('../models/user');
 
 const BAD_REQUEST_CODE = 400;
 const NOT_FOUND = 404;
-const SERVER_ERROR = 500;
 
 const getUsers = (req, res) => {
   User.find({})

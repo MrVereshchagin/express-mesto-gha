@@ -22,8 +22,6 @@ app.use((req, res, next) => {
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);
 
-mongoose.connect('mongodb://localhost:27017/mestodb', () => {
-  console.log(`App listening on port ${PORT}`);
-});
+mongoose.connect('mongodb://localhost:27017/mestodb');
 
 app.listen(PORT);
