@@ -35,6 +35,9 @@ const createUser = (req, res) => {
     about,
     avatar,
   })
+    .orFail(() => {
+      res.send('Пользователь с таким id не найден');
+    })
     .then((user) => {
       res.send({
         _id: user._id,
