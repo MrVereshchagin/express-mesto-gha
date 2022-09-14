@@ -18,14 +18,13 @@ const getUsers = (req, res) => {
 const getCurrentUser = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
-    .orFail(() => {
-      res.send('Пользователь с таким id не найден');
-    })
     .then((users) => {
       res.send({ data: users });
     })
     .catch((err) => {
       if (err.name === 'NotFound') {
+        res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
+      } else {
         res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
       }
     });
