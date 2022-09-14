@@ -18,6 +18,9 @@ const getUsers = (req, res) => {
 const getCurrentUser = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
+    .orFail(() => {
+      res.send('Пользователь с таким id не найден');
+    })
     .then((users) => {
       res.send({ data: users });
     })
@@ -35,9 +38,6 @@ const createUser = (req, res) => {
     about,
     avatar,
   })
-    .orFail(() => {
-      res.send('Пользователь с таким id не найден');
-    })
     .then((user) => {
       res.send({
         _id: user._id,
