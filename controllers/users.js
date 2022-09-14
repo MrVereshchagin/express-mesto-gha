@@ -41,7 +41,12 @@ const createUser = (req, res) => {
         name: user.name,
         about: user.about,
         avatar: user.avatar,
-      });
+      })
+        .catch((err) => {
+          if (err.name === 'ValidationError') {
+            res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные' });
+          }
+        });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
