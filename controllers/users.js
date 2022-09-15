@@ -18,7 +18,7 @@ const getUsers = (req, res) => {
 const getCurrentUser = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
-    .orFail(new Error('Неверный id'))
+    .orFail(new Error('NotValidId'))
     .then((users) => {
       res.send({ data: users });
     })
@@ -26,7 +26,7 @@ const getCurrentUser = (req, res) => {
       if (err.name === 'NotFound') {
         res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
       } else {
-        res.status(BAD_REQUEST_CODE).send({ message: 'Неверный id' });
+        res.status(BAD_REQUEST_CODE).send({ message: 'Пользователь по указанному _id не найден' });
       }
     });
 };
@@ -47,7 +47,7 @@ const createUser = (req, res) => {
       })
         .catch((err) => {
           if (err.name === 'ValidationError') {
-            res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные' });
+            res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные при создании пользователя' });
           }
         });
     })
@@ -61,12 +61,15 @@ const createUser = (req, res) => {
 const updateProfile = (req, res) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
+    .orFail(new Error('NotValidId'))
     .then((user) => {
       res.send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные' });
+      } else {
+        res.status(BAD_REQUEST_CODE).send({ message: 'Пользователь по указанному _id не найден' });
       }
     });
 };
