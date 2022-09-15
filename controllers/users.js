@@ -18,6 +18,7 @@ const getUsers = (req, res) => {
 const getCurrentUser = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
+    .orFail(new Error('Неверный id'))
     .then((users) => {
       res.send({ data: users });
     })
@@ -25,7 +26,7 @@ const getCurrentUser = (req, res) => {
       if (err.name === 'NotFound') {
         res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
       } else {
-        res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
+        res.status(NOT_FOUND).send({ message: 'Неверный id' });
       }
     });
 };
