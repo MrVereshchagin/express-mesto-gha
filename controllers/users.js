@@ -24,7 +24,7 @@ const getCurrentUser = (req, res) => {
       res.send({ data: users });
     })
     .catch((err) => {
-      if (err.name === 'NotFound' || !userId) {
+      if (err.name === 'NotFound' || err.name === 'CastError') {
         res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
       } else {
         res.status(BAD_REQUEST_CODE).send({ message: 'Пользователь по указанному _id не найден' });
