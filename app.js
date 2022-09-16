@@ -21,6 +21,9 @@ app.use((req, res, next) => {
 
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);
+app.use('*', (req, res) => {
+  res.status(404).send({ message: 'Страница не найдена' });
+})
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
