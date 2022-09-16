@@ -27,7 +27,7 @@ const getCurrentUser = (req, res) => {
       if (err.name === 'NotFound' || err.name === 'CastError') {
         res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
       } else {
-        res.status(BAD_REQUEST_CODE).send({ message: 'Пользователь по указанному _id не найден' });
+        res.status(NOT_FOUND).send({ message: 'Пользователь по указанному _id не найден' });
       }
     });
 };
@@ -45,16 +45,13 @@ const createUser = (req, res) => {
         name: user.name,
         about: user.about,
         avatar: user.avatar,
-      })
-        .catch((err) => {
-          if (err.name === 'ValidationError') {
-            res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные при создании пользователя' });
-          }
-        });
+      });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные' });
+      if (err.name === 'ValidationError' || err.name < 2 || err.name > 30) {
+        res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные при создании пользователя' });
+      } else {
+        res.status(SERVER_ERROR).send({ message: 'Ошибка по умолчанию' });
       }
     });
 };
