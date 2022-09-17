@@ -27,9 +27,9 @@ const getCurrentUser = (req, res) => {
       if (err.name === 'NotFound') {
         res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
       } else if (err.name === 'CastError') {
-        res.status(BAD_REQUEST_CODE).send({ message: 'Неверный формат id' });
+        res.status(NOT_FOUND).send({ message: 'Неверный формат id' });
       } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
+        res.status(NOT_FOUND).send({ message: 'Несуществующий id' });
       }
     });
 };
