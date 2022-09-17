@@ -24,10 +24,12 @@ const getCurrentUser = (req, res) => {
       res.send({ data: users });
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(BAD_REQUEST_CODE).send({ message: 'Неверный формат id' });
-      } else if (err.name === 'NotFound') {
+      if (err.name === 'NotFound') {
         res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
+      } else if (err.name === 'CastError') {
+        res.status(BAD_REQUEST_CODE).send({ message: 'Неверный формат id' });
+      } else {
+        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
       }
     });
 };
