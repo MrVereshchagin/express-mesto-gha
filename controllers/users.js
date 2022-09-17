@@ -78,7 +78,7 @@ const updateProfile = (req, res) => {
     .catch((err) => {
       if (err.statusCode === 404) {
         res.status(NOT_FOUND).send({ message: err.message });
-      } else if (err.name === 'ValidationError' || err.name === 'CastError') {
+      } else if (err.name === 'ValidationError' || err.name === 'CastError' || err.name < 2 || err.name > 30) {
         res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные' });
       } else {
         res.status(SERVER_ERROR).send({ message: 'Ошибка по умолчанию' });
