@@ -10,8 +10,10 @@ const getUsers = (req, res) => {
       res.send({ data: users });
     })
     .catch((err) => {
-      if (err.name === 'NotFound') {
-        res.status(NOT_FOUND).send({ message: 'Страница не найдена' });
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        res.status(BAD_REQUEST_CODE).send({ message: 'Невалидные данные при создании пользователя' });
+      } else {
+        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
       }
     });
 };
@@ -19,17 +21,21 @@ const getUsers = (req, res) => {
 const getCurrentUser = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
-    .orFail(new Error('NotValidId'))
+    .orFail(() => {
+      const error = new Error('Неверный id пользователя');
+      error.statusCode = 404;
+      throw error;
+    })
     .then((users) => {
       res.send({ data: users });
     })
     .catch((err) => {
-      if (err.name === 'NotFound') {
-        res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
-      } else if (err.name === 'CastError') {
+      if (err.statusCode === 404) {
+        res.status(NOT_FOUND).send({ message: err.message });
+      } else if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(BAD_REQUEST_CODE).send({ message: 'Неверный формат id' });
       } else {
-        res.status(NOT_FOUND).send({ message: 'Несуществующий id' });
+        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
       }
     });
 };
@@ -50,7 +56,7 @@ const createUser = (req, res) => {
       });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name < 2 || err.name > 30) {
+      if (err.name === 'ValidationError' || err.name === 'CastError' || err.name < 2 || err.name > 30) {
         res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные при создании пользователя' });
       } else {
         res.status(SERVER_ERROR).send({ message: 'Ошибка по умолчанию' });
@@ -68,7 +74,7 @@ const updateProfile = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные' });
-      } else if (err.name < 2 || err.name > 30) {
+      } else if (err.name.length < 2 || err.name > 30) {
         res.status(BAD_REQUEST_CODE).send({ message: 'Неверное количество символов в запросе' });
       } else {
         res.status(BAD_REQUEST_CODE).send({ message: 'Пользователь по указанному _id не найден' });
