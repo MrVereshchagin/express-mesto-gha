@@ -66,7 +66,7 @@ const updateProfile = (req, res) => {
       res.send(user);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.name === 'ValidationError' || err.name === 'CastError' || err.name < 2 || err.name > 30) {
         res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные' });
       } else {
         res.status(BAD_REQUEST_CODE).send({ message: 'Пользователь по указанному _id не найден' });
