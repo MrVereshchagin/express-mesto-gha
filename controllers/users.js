@@ -61,13 +61,15 @@ const createUser = (req, res) => {
 const updateProfile = (req, res) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
-    .orFail(new Error('NotValidId'))
+    .orFail(new Error())
     .then((user) => {
       res.send(user);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError' || err.name < 2 || err.name > 30) {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные' });
+      } else if (err.name < 2 || err.name > 30) {
+        res.status(BAD_REQUEST_CODE).send({ message: 'Неверное количество символов в запросе' });
       } else {
         res.status(BAD_REQUEST_CODE).send({ message: 'Пользователь по указанному _id не найден' });
       }
