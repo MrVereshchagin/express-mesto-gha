@@ -56,7 +56,7 @@ const createUser = (req, res) => {
       });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError' || err.name < 2 || err.name > 30) {
+      if (err.name === 'ValidationError' || err.name === 'CastError' || name.length <= 2 || name.length >= 30) {
         res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные при создании пользователя' });
       } else {
         res.status(SERVER_ERROR).send({ message: 'Ошибка по умолчанию' });
@@ -76,9 +76,9 @@ const updateProfile = (req, res) => {
       res.send(user);
     })
     .catch((err) => {
-      if (err.statusCode === 404 || err.name < 2 || err.name > 30) {
+      if (err.statusCode === 404) {
         res.status(NOT_FOUND).send({ message: err.message });
-      } else if (err.name === 'ValidationError' || err.name === 'CastError') {
+      } else if (err.name === 'ValidationError' || err.name === 'CastError' || name.length <= 2 || name.length >= 30 || about.length <= 2 || about.length >= 30) {
         res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные' });
       } else {
         res.status(SERVER_ERROR).send({ message: 'Ошибка по умолчанию' });
