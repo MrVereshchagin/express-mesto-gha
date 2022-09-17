@@ -67,17 +67,21 @@ const createUser = (req, res) => {
 const updateProfile = (req, res) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
-    .orFail(new Error())
+    .orFail(() => {
+      const error = new Error('Пользователь по указанному _id не найден');
+      error.statusCode = 404;
+      throw error;
+    })
     .then((user) => {
       res.send(user);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.statusCode === 404) {
+        res.status(NOT_FOUND).send({ message: err.message });
+      } else if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные' });
-      } else if (err.name.length < 2 || err.name > 30) {
-        res.status(BAD_REQUEST_CODE).send({ message: 'Неверное количество символов в запросе' });
       } else {
-        res.status(BAD_REQUEST_CODE).send({ message: 'Пользователь по указанному _id не найден' });
+        res.status(SERVER_ERROR).send({ message: 'Ошибка по умолчанию' });
       }
     });
 };
@@ -85,12 +89,21 @@ const updateProfile = (req, res) => {
 const updateAvatar = (req, res) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
+    .orFail(() => {
+      const error = new Error('Пользователь по указанному _id не найден');
+      error.statusCode = 404;
+      throw error;
+    })
     .then((user) => {
       res.send(user);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.statusCode === 404) {
+        res.status(NOT_FOUND).send({ message: err.message });
+      } else if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные' });
+      } else {
+        res.status(SERVER_ERROR).send({ message: 'Ошибка по умолчанию' });
       }
     });
 };
