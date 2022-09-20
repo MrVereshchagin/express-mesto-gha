@@ -31,7 +31,7 @@ const getCurrentUser = (req, res) => {
     })
     .catch((err) => {
       if (err.statusCode === 404) {
-        res.status(NOT_FOUND).send({ message: err.message });
+        res.status(NOT_FOUND).send({ message: 'Неверный id пользователя' });
       } else if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(BAD_REQUEST_CODE).send({ message: 'Неверный формат id' });
       } else {
@@ -68,7 +68,7 @@ const updateProfile = (req, res) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
     .orFail(() => {
-      const error = new Error('Пользователь по указанному _id не найден');
+      const error = new Error('Неверный id пользователя');
       error.statusCode = 404;
       throw error;
     })
@@ -77,8 +77,8 @@ const updateProfile = (req, res) => {
     })
     .catch((err) => {
       if (err.statusCode === 404) {
-        res.status(NOT_FOUND).send({ message: err.message });
-      } else if (err.name === 'ValidationError' || err.name === 'CastError' || name.length <= 2 || name.length >= 30 || about.length <= 2 || about.length >= 30) {
+        res.status(NOT_FOUND).send({ message: 'Неверный id пользователя' });
+      } else if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные' });
       } else {
         res.status(SERVER_ERROR).send({ message: 'Ошибка по умолчанию' });
@@ -90,7 +90,7 @@ const updateAvatar = (req, res) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
     .orFail(() => {
-      const error = new Error('Пользователь по указанному _id не найден');
+      const error = new Error('Неверный id пользователя');
       error.statusCode = 404;
       throw error;
     })
@@ -99,7 +99,7 @@ const updateAvatar = (req, res) => {
     })
     .catch((err) => {
       if (err.statusCode === 404) {
-        res.status(NOT_FOUND).send({ message: err.message });
+        res.status(NOT_FOUND).send({ message: 'Неверный id пользователя' });
       } else if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные' });
       } else {
