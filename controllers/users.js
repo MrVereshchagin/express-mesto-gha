@@ -32,7 +32,7 @@ const getCurrentUser = (req, res) => {
     .catch((err) => {
       if (err.statusCode === 404) {
         res.status(NOT_FOUND).send({ message: 'Неверный id пользователя' });
-      } else if (err.name === 'ValidationError' || err.name === 'CastError') {
+      } else if (err.name === 'CastError') {
         res.status(BAD_REQUEST_CODE).send({ message: 'Неверный формат id' });
       } else {
         res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
@@ -66,7 +66,7 @@ const createUser = (req, res) => {
 
 const updateProfile = (req, res) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
+  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .orFail(() => {
       const error = new Error('Неверный id пользователя');
       error.statusCode = 404;
@@ -88,7 +88,7 @@ const updateProfile = (req, res) => {
 
 const updateAvatar = (req, res) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
+  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .orFail(() => {
       const error = new Error('Неверный id пользователя');
       error.statusCode = 404;
