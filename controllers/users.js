@@ -11,7 +11,7 @@ const getUsers = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        res.status(BAD_REQUEST_CODE).send({ message: 'Невалидные данные при создании пользователя' });
+        res.status(BAD_REQUEST_CODE).send({ message: 'Некорректные данные при создании пользователя' });
       } else {
         res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
       }
