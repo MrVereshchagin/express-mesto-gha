@@ -40,14 +40,14 @@ const createCard = (req, res) => {
 
 const deleteCard = (req, res) => {
   const { cardId } = req.params;
-  Card.findById(cardId)
+  Card.findByIdAndRemove(cardId)
     .orFail(() => {
       const error = new Error('Неверный id карточки');
       error.statusCode = 404;
       throw error;
     })
     .then((card) => {
-      card.remove();
+      res.send(card);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
