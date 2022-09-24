@@ -6,12 +6,8 @@ const getCards = (req, res) => {
     .then((cards) => {
       res.send({ data: cards });
     })
-    .catch((err) => {
-      if (err.name === 'NotFound') {
-        res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
-      } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
-      }
+    .catch(() => {
+      res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
     });
 };
 
