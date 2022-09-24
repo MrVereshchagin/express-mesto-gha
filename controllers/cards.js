@@ -58,7 +58,7 @@ const likeCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndUpdate(cardId, { $addToSet: { likes: owner } }, { new: true })
     .orFail(() => {
-      const error = new Error('Неверный id карточки');
+      const error = new Error('Карточки с таким id нет');
       error.statusCode = 404;
       throw error;
     })
@@ -67,8 +67,8 @@ const likeCard = (req, res) => {
     })
     .catch((err) => {
       if (err.statusCode === 404) {
-        res.status(NOT_FOUND).send({ message: 'Неверный id карточки' });
-      } else if (err.name === 'ValidationError' || err.name === 'CastError') {
+        res.status(NOT_FOUND).send({ message: 'Карточки с таким id нет' });
+      } else if (err.name === 'CastError') {
         res.status(BAD_REQUEST_CODE).send({ message: 'Неверный данные запроса' });
       } else {
         res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
@@ -81,7 +81,7 @@ const disLikeCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndUpdate(cardId, { $pull: { likes: owner } }, { new: true })
     .orFail(() => {
-      const error = new Error('Неверный id карточки');
+      const error = new Error('Карточки с таким id нет');
       error.statusCode = 404;
       throw error;
     })
@@ -90,8 +90,8 @@ const disLikeCard = (req, res) => {
     })
     .catch((err) => {
       if (err.statusCode === 404) {
-        res.status(NOT_FOUND).send({ message: 'Неверный id карточки' });
-      } else if (err.name === 'ValidationError' || err.name === 'CastError') {
+        res.status(NOT_FOUND).send({ message: 'Карточки с таким id нет' });
+      } else if (err.name === 'CastError') {
         res.status(BAD_REQUEST_CODE).send({ message: 'Неверный данные запроса' });
       } else {
         res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
