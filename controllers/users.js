@@ -6,12 +6,8 @@ const getUsers = (req, res) => {
     .then((users) => {
       res.send({ data: users });
     })
-    .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
-        res.status(BAD_REQUEST_CODE).send({ message: 'Некорректные данные при создании пользователя' });
-      } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
-      }
+    .catch(() => {
+      res.status(SERVER_ERROR).send({ message: 'Ошибка сервера' });
     });
 };
 
@@ -19,7 +15,7 @@ const getCurrentUser = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
     .orFail(() => {
-      const error = new Error('Неверный id пользователя');
+      const error = new Error('Пользователя с таким id нет');
       error.statusCode = 404;
       throw error;
     })
@@ -28,7 +24,7 @@ const getCurrentUser = (req, res) => {
     })
     .catch((err) => {
       if (err.statusCode === 404) {
-        res.status(NOT_FOUND).send({ message: 'Неверный id пользователя' });
+        res.status(NOT_FOUND).send({ message: 'Пользователя с таким id нет' });
       } else if (err.name === 'CastError') {
         res.status(BAD_REQUEST_CODE).send({ message: 'Неверный формат id' });
       } else {
@@ -53,7 +49,7 @@ const createUser = (req, res) => {
       });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError' || name.length <= 2 || name.length >= 30) {
+      if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные при создании пользователя' });
       } else {
         res.status(SERVER_ERROR).send({ message: 'Ошибка по умолчанию' });
@@ -65,16 +61,16 @@ const updateProfile = (req, res) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .orFail(() => {
-      const error = new Error('Неверный id пользователя');
+      const error = new Error('Пользователя с таким id нет');
       error.statusCode = 404;
-      throw error;
+      throw error;Пользователя с таким id нет
     })
     .then((user) => {
       res.send(user);
     })
     .catch((err) => {
       if (err.statusCode === 404) {
-        res.status(NOT_FOUND).send({ message: 'Неверный id пользователя' });
+        res.status(NOT_FOUND).send({ message: 'Пользователя с таким id нет' });
       } else if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные' });
       } else {
@@ -87,7 +83,7 @@ const updateAvatar = (req, res) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .orFail(() => {
-      const error = new Error('Неверный id пользователя');
+      const error = new Error('Пользователя с таким id нет');
       error.statusCode = 404;
       throw error;
     })
@@ -96,7 +92,7 @@ const updateAvatar = (req, res) => {
     })
     .catch((err) => {
       if (err.statusCode === 404) {
-        res.status(NOT_FOUND).send({ message: 'Неверный id пользователя' });
+        res.status(NOT_FOUND).send({ message: 'Пользователя с таким id нет' });
       } else if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(BAD_REQUEST_CODE).send({ message: 'Переданы некорректные данные' });
       } else {
