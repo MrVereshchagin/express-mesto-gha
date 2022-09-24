@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   owner: {
-    type: [mongoose.ObjectId],
+    type: mongoose.ObjectId,
     ref: 'user',
     required: true,
   },
