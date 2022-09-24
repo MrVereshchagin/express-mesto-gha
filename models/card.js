@@ -12,15 +12,15 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   owner: {
-    type: mongoose.ObjectId,
+    type: [mongoose.ObjectId],
     ref: 'user',
     required: true,
   },
-  likes: [{
-    type: mongoose.ObjectId,
+  likes: {
+    type: [mongoose.ObjectId],
     default: [],
     ref: 'user',
-  }],
+  },
   createdAt: {
     type: Date,
     default: Date.now,
