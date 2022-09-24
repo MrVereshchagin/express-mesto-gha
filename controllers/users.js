@@ -63,7 +63,7 @@ const updateProfile = (req, res) => {
     .orFail(() => {
       const error = new Error('Пользователя с таким id нет');
       error.statusCode = 404;
-      throw error;Пользователя с таким id нет
+      throw error;
     })
     .then((user) => {
       res.send(user);
