@@ -1,10 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const { errors } = require('celebrate');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const { createUser, login } = require('./controllers/users');
 const { isAuthorized } = require('./middlewares/auth');
+const { validateUser, validateAuthorization } = require('./middlewares/validation');
 
 const { PORT = 3000 } = process.env;
 
@@ -16,12 +18,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/users', isAuthorized, userRouter);
 app.use('/cards', isAuthorized, cardRouter);
 
-app.post('/signup', createUser);
-app.post('/signin', login);
+app.post('/signup', validateUser, createUser);
+app.post('/signin', validateAuthorization, login);
 
 app.use('*', (req, res) => {
   res.status(404).send({ message: 'Страница не найдена' });
 });
+
+app.use(errors());
 
 // eslint-disable-next-line consistent-return
 app.use((err, req, res, next) => {
