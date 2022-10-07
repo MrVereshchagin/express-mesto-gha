@@ -23,6 +23,15 @@ app.use('*', (req, res) => {
   res.status(404).send({ message: 'Страница не найдена' });
 });
 
+// eslint-disable-next-line consistent-return
+app.use((err, req, res, next) => {
+  if (err.statusCode) {
+    return res.status(err.statusCode).send({ message: err.message });
+  }
+  res.status(500).send({ message: 'Что-то пошло не так' });
+  next();
+});
+
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
 app.listen(PORT);
