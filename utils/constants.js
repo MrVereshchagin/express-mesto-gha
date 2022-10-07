@@ -1,9 +1,21 @@
-const BAD_REQUEST_CODE = 400;
-const NOT_FOUND = 404;
-const SERVER_ERROR = 500;
+const ok = 200;
+const created = 201;
+const badRequest = 400;
+const Unauthorized = 401;
+const forbidden = 403;
+const notFound = 404;
+const conflict = 409;
+const serverError = 500;
+const MONGO_DUPLICATE_ERROR_CODE = 11000;
 
 module.exports = {
-  BAD_REQUEST_CODE,
-  NOT_FOUND,
-  SERVER_ERROR,
+  ok,
+  created,
+  badRequest,
+  Unauthorized,
+  forbidden,
+  notFound,
+  conflict,
+  serverError,
+  MONGO_DUPLICATE_ERROR_CODE,
 };

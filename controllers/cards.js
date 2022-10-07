@@ -1,5 +1,10 @@
 const Card = require('../models/card');
-const { BAD_REQUEST_CODE, NOT_FOUND, SERVER_ERROR } = require('../utils/constants');
+const {
+  BAD_REQUEST_CODE,
+  NOT_FOUND,
+  SERVER_ERROR,
+  FORBIDDEN,
+} = require('../utils/constants');
 
 const getCards = (req, res) => {
   Card.find({})
@@ -29,7 +34,7 @@ const createCard = (req, res) => {
       }
     });
 };
-
+// Посмотреть проверку собственника карточки
 const deleteCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndRemove(cardId)
@@ -39,6 +44,10 @@ const deleteCard = (req, res) => {
       throw error;
     })
     .then((card) => {
+      if (card.owner.toString() !== req.user._id.toString()) {
+        next(new FORBIDDEN('Нельзя удалить эту карточку'));
+        return;
+      }
       res.send(card);
     })
     .catch((err) => {
