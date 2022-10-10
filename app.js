@@ -23,15 +23,21 @@ app.use('/cards', isAuthorized, cardRouter);
 app.post('/signup', validateUser, createUser);
 app.post('/signin', validateAuthorization, login);
 
+app.use('*', (req, res) => {
+  res.status(404).send({ message: 'Страница не найдена' });
+});
+
 app.use(errors());
 
 // eslint-disable-next-line consistent-return
-app.use((err, req, res, next) => {
-  if (err.statusCode) {
-    return res.status(err.statusCode).send({ message: err.message });
-  }
-  res.status(500).send({ message: 'Что-то пошло не так' });
-  next();
+app.use((err, req, res) => {
+  const { statusCode = 500, message } = err;
+
+  res
+    .status(statusCode)
+    .send({
+      message: statusCode === 500 ? 'На сервере произошла ошибка' : message,
+    });
 });
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
