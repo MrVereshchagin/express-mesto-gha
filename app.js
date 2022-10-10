@@ -30,7 +30,7 @@ app.use('*', (req, res) => {
 app.use(errors());
 
 // eslint-disable-next-line consistent-return
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
 
   res
@@ -38,6 +38,7 @@ app.use((err, req, res) => {
     .send({
       message: statusCode === 500 ? 'На сервере произошла ошибка' : message,
     });
+  next();
 });
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
