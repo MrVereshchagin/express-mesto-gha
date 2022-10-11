@@ -30,8 +30,8 @@ const getCurrentUser = (req, res, next) => {
 };
 
 const getCurrentUserProfile = (req, res, next) => {
-  User.findById(req.user._id)
-    .orFail(() => new NotFound('Пользователя не существует'))
+  const { _id } = req.user;
+  User.findById(_id)
     .then((user) => {
       res.status(ok).send({ data: user });
     })
