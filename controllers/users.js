@@ -32,6 +32,7 @@ const getCurrentUser = (req, res, next) => {
 const getCurrentUserProfile = (req, res, next) => {
   const { _id } = req.user;
   User.findById(_id)
+    .orFail(() => new NotFound('Пользователя не существует'))
     .then((user) => {
       res.status(ok).send({ data: user });
     })
