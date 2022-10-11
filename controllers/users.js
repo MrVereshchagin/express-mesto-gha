@@ -84,8 +84,6 @@ const login = (req, res, next) => {
     .select('+password')
     .then((user) => {
       if (!user) {
-        // Инструкция throw генерирует исключение и обработка кода
-        // переходит в следующий блок catch(next)
         throw new Unauthorized('Не авторизован');
       } else {
         return bcrypt
