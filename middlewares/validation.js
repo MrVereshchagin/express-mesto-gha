@@ -43,6 +43,7 @@ const validateCardId = celebrate({
     .keys({
       cardId: Joi
         .string()
+        .length(24)
         .hex()
         .required(),
     }),
@@ -61,6 +62,7 @@ const validateCurrentUser = celebrate({
     .keys({
       userId: Joi
         .string()
+        .length(24)
         .hex()
         .required(),
     }),
