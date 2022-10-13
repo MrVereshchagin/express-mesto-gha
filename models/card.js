@@ -11,7 +11,6 @@ const userSchema = new mongoose.Schema({
   link: {
     type: String,
     required: true,
-    match: [urlRegExp, 'Некорректная ссылка'],
   },
   owner: {
     ref: 'user',
