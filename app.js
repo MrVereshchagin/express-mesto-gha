@@ -26,7 +26,7 @@ app.use('/cards', isAuthorized, cardRouter);
 app.post('/signup', validateUser, createUser);
 app.post('/signin', validateAuthorization, login);
 
-app.use(pageNotFound);
+app.use(pageNotFound, isAuthorized);
 
 app.use(errorLogger);
 
