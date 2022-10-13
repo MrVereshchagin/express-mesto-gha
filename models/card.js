@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const urlRegExp = require('../middlewares/validation');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -10,6 +11,7 @@ const userSchema = new mongoose.Schema({
   link: {
     type: String,
     required: true,
+    match: [urlRegExp, 'Некорректная ссылка'],
   },
   owner: {
     ref: 'user',
