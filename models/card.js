@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const urlRegExp = require('../middlewares/validation');
 
 const userSchema = new mongoose.Schema({
   name: {
