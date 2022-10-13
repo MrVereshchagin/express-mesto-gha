@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const urlRegExp = require('../middlewares/validation');
+const isURL = require('validator/lib/isURL');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -11,7 +11,10 @@ const userSchema = new mongoose.Schema({
   link: {
     type: String,
     required: true,
-    match: [urlRegExp, 'Некорректная ссылка'],
+    validate: {
+      validator: (v) => { isURL(v); },
+      message: 'Некорректная ссылка',
+    },
   },
   owner: {
     ref: 'user',
